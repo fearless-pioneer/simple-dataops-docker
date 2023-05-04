@@ -16,7 +16,9 @@ $ conda activate simple-dataops-k8s
 $ make init      # setup packages (need only once)
 ```
 
-## K8s Cluster Setup
+## How To Play
+
+### K8s Cluster Setup
 
 ```bash
 $ make cluster          # create a k8s cluster (need only once)
@@ -27,6 +29,8 @@ You can delete the k8s cluster.
 ```bash
 $ make cluster-clean    # delete the k8s cluster
 ```
+
+### TBD
 
 ## For Developers
 
