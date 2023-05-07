@@ -1,30 +1,25 @@
-PYTHON=3.10
-BASENAME=$(shell basename $(CURDIR))
 PROFILE_NAME=simple-dataops-k8s
 
 ######################
 #   initialization   #
 ######################
-env:
-	conda create -y -n $(BASENAME) python=$(PYTHON)
-
-install-pdm:
-	@echo "Install pdm";\
+install-poetry:
+	@echo "Install poetry";\
 	if [ `command -v pip` ];\
-		then pip install pdm;\
+		then pip install poetry;\
 	else\
-		curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -;\
+		curl -sSL https://install.python-poetry.org | python3 -;\
 	fi;
 
 init:
 	@echo "Construct development environment";\
 	if [ -z $(VIRTUAL_ENV) ]; then echo Warning, Virtual Environment is required; fi;\
-	if [ -z `command -v pdm` ];\
-		then make install-pdm;\
+	if [ -z `command -v poetry` ];\
+		then make install-poetry;\
 	fi;\
 	pip install -U pip
-	pdm install
-	pdm run pre-commit install
+	poetry install
+	poetry run pre-commit install
 
 #######################
 #   static analysis   #
@@ -32,11 +27,11 @@ init:
 check: format lint
 
 format:
-	pdm run black .
+	poetry run black .
 
 lint:
-	pdm run pyright
-	pdm run ruff src --fix
+	poetry run pyright
+	poetry run ruff src --fix
 
 ###############
 #   cluster   #
