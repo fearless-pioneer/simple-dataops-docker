@@ -1,27 +1,25 @@
-[project]
+[tool.poetry]
 name = "simple-dataops-k8s"
 version = "0.1.0"
 description = "A simple DataOps for wine recognition dataset on K8s"
 authors = [
-    {name = "dongminlee94", email = "kid33629@gmail.com"},
-    {name = "Kimdongui", email = "rkdqus2006@naver.com"},
+    "dongminlee94 <kid33629@gmail.com>",
+    "Kimdongui <rkdqus2006@naver.com>",
 ]
-dependencies = []
-requires-python = ">=3.10,<3.11"
-readme = "README.md"
 
-[tool.pdm]
-[tool.pdm.dev-dependencies]
-dev = [
-    "black>=23.3.0",
-    "pytest>=7.3.0",
-    "pre-commit>=3.2.2",
-    "pyright>=1.1.304",
-    "ruff>=0.0.261",
-]
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+
+[tool.poetry.dev-dependencies]
+black = ">=23.3.0"
+pytest = ">=7.3.0"
+pre-commit = ">=3.2.2"
+pyright = ">=1.1.304"
+ruff = ">=0.0.261"
+
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 110
