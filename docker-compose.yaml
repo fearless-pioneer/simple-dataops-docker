@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:14.0
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: airflowuser
+      POSTGRES_PASSWORD: airflowpassword
+      POSTGRES_DB: airflowdb
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-U", "targetuser", "-d", "targetdatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  initdb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: initdb
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - .env
+    entrypoint: /bin/bash
+    command: -c "airflow db init && airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin && sleep infinity"
