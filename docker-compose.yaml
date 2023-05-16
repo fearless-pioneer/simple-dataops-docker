@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: airflowpassword
       POSTGRES_DB: airflowdb
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-U", "targetuser", "-d", "targetdatabase"]
+      test: ["CMD", "pg_isready", "-q", "-U", "airflowuser", "-d", "airflowdb"]
       interval: 10s
       timeout: 5s
       retries: 5
