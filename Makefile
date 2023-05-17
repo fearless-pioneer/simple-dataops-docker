@@ -27,12 +27,6 @@ lint:
 	poetry run pyright
 	poetry run ruff src --fix
 
-####################
-#   docker build   #
-####################
-build:
-	docker build --platform linux/amd64 -f Dockerfile -t simple-dataops-airflow:latest .
-
 ######################
 #   docker compose   #
 ######################
