@@ -1,15 +1,9 @@
-PROFILE_NAME=simple-dataops-k8s
-
 ######################
 #   initialization   #
 ######################
 install-poetry:
 	@echo "Install poetry";\
-	if [ `command -v pip` ];\
-		then pip install poetry;\
-	else\
-		curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2;\
-	fi;
+	curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
 
 init:
 	@echo "Construct development environment";\
@@ -32,14 +26,3 @@ format:
 lint:
 	poetry run pyright
 	poetry run ruff src --fix
-
-###############
-#   cluster   #
-###############
-cluster:
-	minikube start --driver=docker --profile $(PROFILE_NAME) --extra-config=kubelet.housekeeping-interval=10s --cpus=max --memory=max
-	minikube addons enable metrics-server --profile $(PROFILE_NAME)
-	minikube addons list --profile $(PROFILE_NAME)
-
-cluster-clean:
-	minikube delete --profile $(PROFILE_NAME)
