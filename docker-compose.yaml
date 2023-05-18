@@ -28,9 +28,7 @@ services:
       retries: 5
 
   initdb:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: simple-dataops-airflow:latest
     container_name: initdb
     depends_on:
       - redis
@@ -43,3 +41,68 @@ services:
       - |
         airflow db init &&
         airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin
+
+  webserver:
+    image: simple-dataops-airflow:latest
+    container_name: webserver
+    depends_on:
+      - redis
+      - postgres
+      - initdb
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  scheduler:
+    image: simple-dataops-airflow:latest
+    container_name: scheduler
+    depends_on:
+      - webserver
+    env_file:
+      - .env
+    command: scheduler
+
+  flower:
+    image: simple-dataops-airflow:latest
+    container_name: flower
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    ports:
+      - 5555:5555
+    command: celery flower
+
+  worker1:
+    image: simple-dataops-airflow:latest
+    container_name: worker1
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker -H worker1 -q queue1
+
+  worker2:
+    image: simple-dataops-airflow:latest
+    container_name: worker2
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker -H worker2 -q queue2
+
+  worker3:
+    image: simple-dataops-airflow:latest
+    container_name: worker3
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker -H worker3 -q queue3

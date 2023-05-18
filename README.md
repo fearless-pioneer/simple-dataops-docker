@@ -14,7 +14,19 @@ $ make init     # setup packages (need only once)
 
 ## How To Play
 
-### 1. Infra Setup
+### 1. Build Image
+
+```bash
+$ make build-image          # build an airflow image (need only once)
+```
+
+You can remove the airflow image.
+
+```bash
+$ make build-image-clean    # remove the airflow image
+```
+
+### 2. Create Infra
 
 ```bash
 $ make server          # create all container servers (need only once)

@@ -28,6 +28,15 @@ lint:
 	poetry run ruff src --fix
 
 ######################
+#   build image   #
+######################
+build-image:
+	docker build -t simple-dataops-airflow -f Dockerfile .
+
+build-image-clean:
+	docker rmi simple-dataops-airflow
+
+######################
 #   docker compose   #
 ######################
 server:
@@ -35,4 +44,3 @@ server:
 
 server-clean:
 	docker compose down -v
-	docker rmi simple-dataops-k8s-initdb
