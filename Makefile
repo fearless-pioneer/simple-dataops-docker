@@ -39,8 +39,8 @@ build-image-clean:
 ######################
 #   docker compose   #
 ######################
-server:
+compose:
 	docker compose up -d
 
-server-clean:
+compose-clean:
 	docker compose down -v

@@ -46,8 +46,6 @@ services:
     image: simple-dataops-airflow:latest
     container_name: webserver
     depends_on:
-      - redis
-      - postgres
       - initdb
     env_file:
       - .env

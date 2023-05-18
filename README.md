@@ -29,16 +29,16 @@ $ make build-image-clean    # remove the airflow image
 ### 2. Create Infra
 
 ```bash
-$ make server          # create all container servers (need only once)
+$ make compose          # create all containers (need only once)
 ```
 
-You can delete the container servers.
+You can delete the containers.
 
 ```bash
-$ make server-clean    # delete the container servers
+$ make compose-clean    # delete the containers
 ```
 
-### 2. TBD
+### 3. TBD
 
 ## For Developers
 
