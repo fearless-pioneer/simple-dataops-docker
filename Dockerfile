@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 USER airflow
 
 RUN pip install -U pip &&\
-    pip install scikit-learn pandas psycopg2-binary apache-airflow[celery,redis]==2.5.0
+    pip install apache-airflow[celery,redis]==2.5.0
