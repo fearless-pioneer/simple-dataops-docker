@@ -44,3 +44,4 @@ compose:
 
 compose-clean:
 	docker compose down -v
+	rm -r ./logs

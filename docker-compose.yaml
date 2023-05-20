@@ -4,12 +4,12 @@ services:
   postgres:
     image: postgres:14.0
     container_name: postgres
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_USER: airflowuser
       POSTGRES_PASSWORD: airflowpassword
       POSTGRES_DB: airflowdb
+    ports:
+      - 5432:5432
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-U", "airflowuser", "-d", "airflowdb"]
       interval: 10s
@@ -52,11 +52,6 @@ services:
     ports:
       - 8080:8080
     command: webserver
-    healthcheck:
-      test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   scheduler:
     image: simple-dataops-airflow:latest
@@ -66,6 +61,9 @@ services:
     env_file:
       - .env
     command: scheduler
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
 
   flower:
     image: simple-dataops-airflow:latest
@@ -85,7 +83,10 @@ services:
       - scheduler
     env_file:
       - .env
-    command: celery worker -H worker1 -q queue1
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
 
   worker2:
     image: simple-dataops-airflow:latest
@@ -94,7 +95,10 @@ services:
       - scheduler
     env_file:
       - .env
-    command: celery worker -H worker2 -q queue2
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
 
   worker3:
     image: simple-dataops-airflow:latest
@@ -103,4 +107,7 @@ services:
       - scheduler
     env_file:
       - .env
-    command: celery worker -H worker3 -q queue3
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs

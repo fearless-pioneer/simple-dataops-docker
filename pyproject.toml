@@ -9,6 +9,7 @@ authors = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
+apache-airflow = "2.5.0"
 
 [tool.poetry.dev-dependencies]
 black = ">=23.3.0"
