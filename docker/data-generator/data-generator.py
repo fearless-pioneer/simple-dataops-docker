@@ -32,7 +32,7 @@ def main() -> None:
             cnt,
             json.dumps(
                 {
-                    "Time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),  # KST로 바꾸자
+                    "Time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
                     "X": json.dumps(X.iloc[cnt % data_length].to_dict()),
                     "y": str(y.iloc[cnt % data_length]),
                 },
