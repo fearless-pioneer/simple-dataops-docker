@@ -13,10 +13,13 @@ Maintainer:
 """
 import redis
 from sklearn.datasets import load_wine
-from time import time, sleep
+from time import sleep
+from datetime import datetime
+from pytz import timezone
 import json
 
 REDIS_CLINET = redis.Redis(host="redis", port=6379, db=0)
+KR_TZ = timezone("Asia/Seoul")
 
 
 def main() -> None:
@@ -27,10 +30,9 @@ def main() -> None:
     while True:
         REDIS_CLINET.set(
             cnt,
-            "$",
             json.dumps(
                 {
-                    "epoch_time": time(),  # KST로 바꾸자
+                    "Time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),  # KST로 바꾸자
                     "X": json.dumps(X.iloc[cnt % data_length].to_dict()),
                     "y": str(y.iloc[cnt % data_length]),
                 },
