@@ -4,7 +4,7 @@ Description:
     This script implements data generator for proeject demo.
     1. Load wind dataset from sckit-learn datasets.
     2. Transform single row of wind datasets to JSON format.
-    3. Push redis stack DB via redis python sdk.
+    3. Push redis DB via redis python sdk.
     3. Cycle 1-3 infinite steps.
 
 Maintainer:
