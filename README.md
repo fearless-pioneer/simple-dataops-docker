@@ -1,36 +1,32 @@
-# Simple DataOps K8s
+# Simple DataOps Docker
 
 ## Prerequisites
 
 - Install [docker](https://docs.docker.com/engine/install/).
-- Install [Minikube](https://minikube.sigs.k8s.io/docs/start/).
-- Install [Helm](https://helm.sh/docs/intro/install/).
 
 ## Preparation
 
-Install [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) and execute the following commands:
+Install [Pyenv](https://github.com/pyenv/pyenv#installation) or [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) and execute the following commands:
 
 ```bash
-$ make env       # create a conda environment (need only once)
-$ conda activate simple-dataops-k8s
-$ make init      # setup packages (need only once)
+$ make init     # setup packages (need only once)
 ```
 
 ## How To Play
 
-### K8s Cluster Setup
+### 1. Infra Setup
 
 ```bash
-$ make cluster          # create a k8s cluster (need only once)
+$ make server          # create all container servers (need only once)
 ```
 
-You can delete the k8s cluster.
+You can delete the container servers.
 
 ```bash
-$ make cluster-clean    # delete the k8s cluster
+$ make server-clean    # delete the container servers
 ```
 
-### TBD
+### 2. TBD
 
 ## For Developers
 
