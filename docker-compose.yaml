@@ -2,7 +2,7 @@ version: "3"
 
 services:
   redis:
-    image: redis:latest
+    image: redis:7.0
     ports:
       - 6379:6379
     healthcheck:
@@ -13,12 +13,8 @@ services:
 
   data-generator:
     build:
-      context: .
-      dockerfile: docker/data-generator/Dockerfile
+      context: docker/data-generator
+      dockerfile: Dockerfile
     depends_on:
       redis:
         condition: service_healthy
-
-networks:
-  default:
-    name: redis-networks
