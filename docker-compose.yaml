@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  data-generator:
+    build:
+      context: docker/data-generator
+      dockerfile: Dockerfile
+    container_name: data-generator
+    depends_on:
+      redis:
+        condition: service_healthy
+
   postgres:
     image: postgres:14.0
     container_name: postgres
@@ -22,13 +31,13 @@ services:
     ports:
       - 6379:6379
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   initdb:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: initdb
     depends_on:
       - redis
@@ -43,7 +52,7 @@ services:
         airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin
 
   webserver:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: webserver
     depends_on:
       - initdb
@@ -54,7 +63,7 @@ services:
     command: webserver
 
   scheduler:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: scheduler
     depends_on:
       - webserver
@@ -66,7 +75,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   flower:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: flower
     depends_on:
       - redis
@@ -77,7 +86,7 @@ services:
     command: celery flower
 
   worker1:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: worker1
     depends_on:
       - scheduler
@@ -89,7 +98,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   worker2:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: worker2
     depends_on:
       - scheduler
@@ -101,7 +110,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   worker3:
-    image: simple-dataops-airflow:latest
+    image: simple-dataops-docker-airflow:latest
     container_name: worker3
     depends_on:
       - scheduler

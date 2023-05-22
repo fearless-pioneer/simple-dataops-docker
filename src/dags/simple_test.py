@@ -1,4 +1,9 @@
-"""Simple test."""
+"""Simple test.
+
+Maintainer:
+    Name: Dongmin Lee
+    Email: kid33629@gmail.com
+"""
 import time
 from datetime import datetime, timedelta
 

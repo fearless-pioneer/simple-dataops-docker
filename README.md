@@ -14,16 +14,16 @@ $ make init     # setup packages (need only once)
 
 ## How To Play
 
-### 1. Build Image
+### 1. Create Infra
 
 ```bash
-$ make build-image          # build an airflow image (need only once)
+$ make compose          # create all the containers (need only once)
 ```
 
-You can remove the airflow image.
+You can delete the containers.
 
 ```bash
-$ make build-image-clean    # remove the airflow image
+$ make compose-clean    # delete the containers
 ```
 
 ### 2. Create Infra
