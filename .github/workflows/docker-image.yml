@@ -2,7 +2,7 @@ name: "[Repo CI] Docker Image"
 
 on:
   push:
-    branches: [ feature/add-docker-image-github-action ]
+    branches: [ main ]
 
 jobs:
   build-image:
