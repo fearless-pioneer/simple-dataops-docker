@@ -11,20 +11,21 @@ Maintainer:
     Name: Kimdongui
     Email: rkdqus2006@naver.com
 """
-import redis
-from sklearn.datasets import load_wine
-from time import sleep
-from datetime import datetime
-from pytz import timezone
 import json
+from datetime import datetime
+from time import sleep
+
+import redis
+from pytz import timezone
+from sklearn.datasets import load_wine
 
 REDIS_CLINET = redis.Redis(host="redis", port=6379, db=0)
 KR_TZ = timezone("Asia/Seoul")
 
 
 def main() -> None:
-    """Main function."""
-    X, y = load_wine(return_X_y=True, as_frame=True)
+    """Run main function."""
+    X, y = load_wine(return_X_y=True, as_frame=True)  # noqa: N806
     cnt = 0
     data_length = X.shape[0]
     while True:

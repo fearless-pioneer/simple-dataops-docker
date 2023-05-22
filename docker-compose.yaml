@@ -1,20 +1,122 @@
 version: "3"
 
 services:
-  redis:
-    image: redis:7.0
-    ports:
-      - 6379:6379
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   data-generator:
     build:
       context: docker/data-generator
       dockerfile: Dockerfile
+    container_name: data-generator
     depends_on:
       redis:
         condition: service_healthy
+
+  postgres:
+    image: postgres:14.0
+    container_name: postgres
+    environment:
+      POSTGRES_USER: airflowuser
+      POSTGRES_PASSWORD: airflowpassword
+      POSTGRES_DB: airflowdb
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-U", "airflowuser", "-d", "airflowdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  initdb:
+    image: simple-dataops-docker-airflow:latest
+    container_name: initdb
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - .env
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db init &&
+        airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin
+
+  webserver:
+    image: simple-dataops-docker-airflow:latest
+    container_name: webserver
+    depends_on:
+      - initdb
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    command: webserver
+
+  scheduler:
+    image: simple-dataops-docker-airflow:latest
+    container_name: scheduler
+    depends_on:
+      - webserver
+    env_file:
+      - .env
+    command: scheduler
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+
+  flower:
+    image: simple-dataops-docker-airflow:latest
+    container_name: flower
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    ports:
+      - 5555:5555
+    command: celery flower
+
+  worker1:
+    image: simple-dataops-docker-airflow:latest
+    container_name: worker1
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+
+  worker2:
+    image: simple-dataops-docker-airflow:latest
+    container_name: worker2
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+
+  worker3:
+    image: simple-dataops-docker-airflow:latest
+    container_name: worker3
+    depends_on:
+      - scheduler
+    env_file:
+      - .env
+    command: celery worker
+    volumes:
+      - ./src/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs

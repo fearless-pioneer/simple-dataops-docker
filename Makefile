@@ -25,4 +25,16 @@ format:
 
 lint:
 	poetry run pyright
-	poetry run ruff src --fix
+	poetry run ruff src docker --fix
+
+######################
+#   docker compose   #
+######################
+compose:
+	docker build -t simple-dataops-docker-airflow -f docker/airflow/Dockerfile .
+	docker compose up -d
+
+compose-clean:
+	docker compose down -v
+	docker rmi simple-dataops-docker-data-generator simple-dataops-docker-airflow
+	rm -r ./logs
