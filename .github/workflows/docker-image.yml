@@ -1,0 +1,30 @@
+name: "[Repo CI] Docker Image"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Build airflow image
+      uses: docker/build-push-action@v4
+      with:
+        context: docker/airflow
+        dockerfile: Dockerfile
+        push: false
+        load: true
+        tags: simple-dataops-docker-airflow:latest
+    - name: Build data generator image
+      uses: docker/build-push-action@v4
+      with:
+        context: docker/data-generator
+        dockerfile: Dockerfile
+        push: false
+        load: true
+        tags: simple-dataops-docker-data-generator:latest
