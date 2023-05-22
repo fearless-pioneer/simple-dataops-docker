@@ -26,19 +26,7 @@ You can delete the containers.
 $ make compose-clean    # delete the containers
 ```
 
-### 2. Create Infra
-
-```bash
-$ make compose          # create all containers (need only once)
-```
-
-You can delete the containers.
-
-```bash
-$ make compose-clean    # delete the containers
-```
-
-### 3. TBD
+### 2. TBD
 
 ## For Developers
 
