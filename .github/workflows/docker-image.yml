@@ -2,7 +2,7 @@ name: "[Repo CI] Docker Image"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ feature/add-docker-image-github-action ]
 
 jobs:
   build-image:
@@ -16,6 +16,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: docker/airflow
+        dockerfile: Dockerfile
         push: false
         load: true
         tags: simple-dataops-docker-airflow:latest
@@ -23,6 +24,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: docker/data-generator
+        dockerfile: Dockerfile
         push: false
         load: true
         tags: simple-dataops-docker-data-generator:latest
