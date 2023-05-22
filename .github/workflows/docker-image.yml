@@ -15,7 +15,14 @@ jobs:
     - name: Build airflow image
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: docker/airflow
         push: false
         load: true
-        tags: simple-dataops-airflow:latest
+        tags: simple-dataops-docker-airflow:latest
+    - name: Build data generator image
+      uses: docker/build-push-action@v4
+      with:
+        context: docker/data-generator
+        push: false
+        load: true
+        tags: simple-dataops-docker-data-generator:latest
