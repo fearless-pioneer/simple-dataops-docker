@@ -59,7 +59,7 @@ services:
     env_file:
       - .env
     ports:
-      - 8080:8080
+      - 8008:8080
     command: webserver
 
   scheduler:
