@@ -93,7 +93,7 @@ services:
     image: simple-dataops-docker-airflow:latest
     container_name: flower
     depends_on:
-      - rabbitmq
+      - redis
     env_file:
       - .env
     ports:
