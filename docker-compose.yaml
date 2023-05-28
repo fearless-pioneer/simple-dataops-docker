@@ -25,6 +25,21 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   redis:
     image: redis:7.0
     container_name: redis
@@ -78,7 +93,7 @@ services:
     image: simple-dataops-docker-airflow:latest
     container_name: flower
     depends_on:
-      - redis
+      - rabbitmq
     env_file:
       - .env
     ports:
