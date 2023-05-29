@@ -7,20 +7,19 @@ services:
       dockerfile: Dockerfile
     container_name: data-generator
     depends_on:
-      redis:
+      mongodb:
         condition: service_healthy
 
-  postgres:
-    image: postgres:14.0
-    container_name: postgres
+  mongodb:
+    image: mongo:6.0.6
+    container_name: mongodb
     environment:
-      POSTGRES_USER: airflowuser
-      POSTGRES_PASSWORD: airflowpassword
-      POSTGRES_DB: airflowdb
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
     ports:
-      - 5432:5432
+      - 27017:27017
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-U", "airflowuser", "-d", "airflowdb"]
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,13 +28,28 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: rabbit
     ports:
       - 5672:5672
       - 15672:15672
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:14.0
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-U", "postgres", "-d", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5

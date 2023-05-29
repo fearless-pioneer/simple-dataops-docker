@@ -15,34 +15,46 @@ import json
 from datetime import datetime
 from time import sleep
 
-import redis
+from pymongo import MongoClient
 from pytz import timezone
 from sklearn.datasets import load_wine
 
-REDIS_CLINET = redis.Redis(host="redis", port=6379, db=0)
-KR_TZ = timezone("Asia/Seoul")
 
-
-def main() -> None:
+def main(mongo_client: MongoClient) -> None:
     """Run main function."""
+    # Create a collection
+    collection = mongo_client["mongo"]["wine_data"]
+
+    # Load wine dataset
     X, y = load_wine(return_X_y=True, as_frame=True)  # noqa: N806
+
+    # Generate data continuously
     cnt = 0
     data_length = X.shape[0]
     while True:
-        REDIS_CLINET.set(
-            cnt,
-            json.dumps(
-                {
-                    "Time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
-                    "X": json.dumps(X.iloc[cnt % data_length].to_dict()),
-                    "y": str(y.iloc[cnt % data_length]),
-                },
-            ),
+        collection.insert_one(
+            {
+                "index": cnt,
+                "time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
+                "input": json.dumps(X.iloc[cnt % data_length].to_dict()),
+                "target": str(y.iloc[cnt % data_length]),
+            },
         )
-        cnt += 1
         print(f"{cnt} row is pushed...")
+        cnt += 1
         sleep(2)
 
 
 if __name__ == "__main__":
-    main()
+    mongo_client = MongoClient(
+        username="mongo",
+        password="mongo",
+        host="mongodb",
+        port=27017,
+        authSource="admin",
+        connectTimeoutMS=60000,
+        readPreference="primary",
+        directConnection=True,
+        ssl=False,
+    )
+    main(mongo_client=mongo_client)
