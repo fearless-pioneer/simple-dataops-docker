@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo:6.0.6
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    container_name: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    ports:
+      - 8081:8081
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  data-generator:
+    build:
+      context: docker/data-generator
+      dockerfile: Dockerfile
+    container_name: data-generator
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  mariadb:
+    image: mariadb:10.6.13
+    container_name: mariadb
+    environment:
+      MARIADB_USER: maria
+      MARIADB_PASSWORD: maria
+      MARIADB_DATABASE: maria
+      MARIADB_ROOT_PASSWORD: maria
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default:
+    name: simple-dataops-network
