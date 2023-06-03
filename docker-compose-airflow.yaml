@@ -1,40 +1,17 @@
 version: "3"
 
 services:
-  data-generator:
-    build:
-      context: docker/data-generator
-      dockerfile: Dockerfile
-    container_name: data-generator
-    depends_on:
-      mongodb:
-        condition: service_healthy
-
-  mongodb:
-    image: mongo:6.0.6
-    container_name: mongodb
+  postgres:
+    image: postgres:14.0
+    container_name: postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - 27017:27017
     healthcheck:
-      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: rabbit
-      RABBITMQ_DEFAULT_PASS: rabbit
-    ports:
-      - 5672:5672
-      - 15672:15672
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: ["CMD", "pg_isready", "-q", "-U", "postgres", "-d", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -66,7 +43,7 @@ services:
       retries: 5
 
   initdb:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: initdb
     depends_on:
       - redis
@@ -81,7 +58,7 @@ services:
         airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin
 
   webserver:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: webserver
     depends_on:
       - initdb
@@ -92,7 +69,7 @@ services:
     command: webserver
 
   scheduler:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: scheduler
     depends_on:
       - webserver
@@ -104,7 +81,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   flower:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: flower
     depends_on:
       - redis
@@ -115,7 +92,7 @@ services:
     command: celery flower
 
   worker1:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: worker1
     depends_on:
       - scheduler
@@ -127,7 +104,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   worker2:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: worker2
     depends_on:
       - scheduler
@@ -139,7 +116,7 @@ services:
       - ./logs:/opt/airflow/logs
 
   worker3:
-    image: simple-dataops-docker-airflow:latest
+    image: airflow:latest
     container_name: worker3
     depends_on:
       - scheduler
@@ -149,3 +126,7 @@ services:
     volumes:
       - ./src/dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
+
+networks:
+  default:
+    name: simple-dataops-network

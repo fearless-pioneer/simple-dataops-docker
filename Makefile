@@ -30,11 +30,34 @@ lint:
 ######################
 #   docker compose   #
 ######################
-compose:
-	docker build -t simple-dataops-docker-airflow -f docker/airflow/Dockerfile .
-	docker compose up -d
+all:
+	make database
+	make airflow
+	make broker
 
-compose-clean:
-	docker compose down -v
-	docker rmi simple-dataops-docker-data-generator simple-dataops-docker-airflow
+all-clean:
+	make broker-clean
+	make airflow-clean
+	make database-clean
+
+database:
+	docker compose -p database -f docker-compose-database.yaml up -d
+
+database-clean:
+	docker compose -p database down -v
+	docker rmi database-data-generator
+
+airflow:
+	docker build -t airflow -f docker/airflow/Dockerfile .
+	docker compose -p airflow -f docker-compose-airflow.yaml up -d
+
+airflow-clean:
+	docker compose -p airflow down -v
+	docker rmi airflow
 	rm -r ./logs
+
+broker:
+	docker compose -p broker -f docker-compose-broker.yaml up -d
+
+broker-clean:
+	docker compose -p broker down -v
