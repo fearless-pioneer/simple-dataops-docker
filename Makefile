@@ -30,12 +30,12 @@ lint:
 ######################
 #   docker compose   #
 ######################
-all:
+compose:
 	make database
 	make airflow
 	make broker
 
-all-clean:
+compose-clean:
 	make broker-clean
 	make airflow-clean
 	make database-clean

@@ -5,6 +5,7 @@ USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     vim \
+    libmariadb-dev \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -12,4 +13,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 USER airflow
 
 RUN pip install -U pip &&\
-    pip install psycopg2-binary apache-airflow[celery,redis]==2.5.0
+    pip install psycopg2-binary apache-airflow[celery,redis]==2.5.0 pymongo==4.3.3 pymysql==1.0.3
