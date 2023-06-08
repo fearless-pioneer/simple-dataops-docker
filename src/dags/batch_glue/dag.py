@@ -7,9 +7,7 @@ Maintainer:
 from datetime import datetime, timedelta
 
 from airflow.models import DAG
-from airflow.operators.python import PythonOperator
-
-from src.dags.batch_glue.pipeline import run
+from airflow.operators.bash import BashOperator
 
 default_args = {
     "owner": "dongminlee",
@@ -26,9 +24,8 @@ with DAG(
     start_date=datetime.today(),
     max_active_tasks=2,
 ) as dag:
-    t1 = PythonOperator(
+    t1 = BashOperator(
         task_id="task_1",
-        python_callable=run,
-        op_kwargs={"fruit_name": "apple"},
+        bash_command="python {{ ds }}",
         dag=dag,
     )

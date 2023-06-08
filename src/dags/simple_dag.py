@@ -4,10 +4,10 @@ Maintainer:
     Name: Dongmin Lee
     Email: kid33629@gmail.com
 """
-import time
 from datetime import datetime, timedelta
 
 from airflow.models import DAG
+from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
 
@@ -16,15 +16,6 @@ def print_fruit(fruit_name: str) -> None:
     print("=" * 30)
     print(f"fruit_name: {fruit_name}")
     print("=" * 30)
-
-
-def sleep_seconds(seconds: int) -> None:
-    """Sleep seconds."""
-    print("=" * 30)
-    print(f"seconds: {str(seconds)}")
-    print("sleeping...")
-    print("=" * 30)
-    time.sleep(seconds)
 
 
 default_args = {
@@ -49,25 +40,22 @@ with DAG(
         dag=dag,
     )
 
-    t2 = PythonOperator(
+    t2 = BashOperator(task_id="task_3", bash_command="sleep 10", dag=dag)
+
+    t3 = PythonOperator(
         task_id="task_2",
         python_callable=print_fruit,
         op_kwargs={"fruit_name": "banana"},
         dag=dag,
     )
 
-    t3 = PythonOperator(
-        task_id="task_3",
-        python_callable=sleep_seconds,
-        op_kwargs={"seconds": 10},
-        dag=dag,
-    )
+    t4 = BashOperator(task_id="task_3", bash_command="sleep 5", dag=dag)
 
-    t4 = PythonOperator(
+    t5 = PythonOperator(
         task_id="task_4",
         python_callable=print_fruit,
         op_kwargs={"fruit_name": "cherry"},
         dag=dag,
     )
 
-    t1 >> [t2, t3] >> t4
+    t1 >> [t2, t3] >> t4 >> t5
