@@ -1,7 +1,6 @@
 """Batch glue pipeline."""
 
 from argparse import ArgumentParser
-from datetime import datetime
 
 import pymysql
 from pymongo import MongoClient
@@ -68,17 +67,15 @@ def run(start_date: str, mongo_client: MongoClient, maria_client: Connection) ->
     docs = list(collection.find(query))
 
     for doc in docs:
-        time = datetime.strptime(doc["time"], "%Y-%m-%d %H:%M:%S")
         features = eval(doc["input"])
-
         query = f"""
         INSERT INTO wine_data
             (mongo_id, time, alcohol, malic_acid, ash, alcalinity_of_ash, magnesium,
             total_phenols, flavanoids, nonflavanoid_phenols, proanthocyanins,
             color_intensity, hue, od280_od315_of_diluted_wines, proline, target)
             VALUES (
-                {doc["_id"]},
-                {time},
+                "{doc["_id"]}",
+                "{doc["time"]}",
                 {features["alcohol"]},
                 {features["malic_acid"]},
                 {features["ash"]},
