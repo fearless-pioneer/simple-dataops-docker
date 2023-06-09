@@ -36,8 +36,8 @@ def main(mongo_client: MongoClient) -> None:
             {
                 "index": cnt,
                 "time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
-                "input": json.dumps(X.iloc[cnt % data_length].to_dict()),
-                "target": str(y.iloc[cnt % data_length]),
+                "features": json.dumps(X.iloc[cnt % data_length].to_dict()),
+                "labels": str(y.iloc[cnt % data_length]),
             },
         )
         print(f"{cnt} row is pushed...")

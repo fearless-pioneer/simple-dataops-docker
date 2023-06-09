@@ -1,6 +1,7 @@
 """Batch glue pipeline."""
 
 from argparse import ArgumentParser
+from datetime import datetime, timedelta
 
 import pymysql
 from pymongo import MongoClient
@@ -12,7 +13,7 @@ def create_db_client() -> tuple[MongoClient, Connection]:
     mongo_client = MongoClient(
         username="mongo",
         password="mongo",
-        host="localhost",
+        host="mongodb",
         port=27017,
         directConnection=True,
         ssl=False,
@@ -21,9 +22,10 @@ def create_db_client() -> tuple[MongoClient, Connection]:
     maria_client = pymysql.connect(
         user="maria",
         password="maria",
-        host="localhost",
+        host="mariadb",
         port=3306,
         database="maria",
+        charset="utf8",
     )
     return mongo_client, maria_client
 
@@ -57,54 +59,68 @@ def create_table(maria_client: Connection) -> None:
         maria_client.commit()
 
 
-def run(start_date: str, mongo_client: MongoClient, maria_client: Connection) -> None:
+def run(task_time: str, mongo_client: MongoClient, maria_client: Connection) -> None:
     """Run main function."""
-    # Get wine data collection
-    collection = mongo_client["mongo"]["wine_data"]
+    # Construct a start_date from the task_time
+    task_time = datetime.fromisoformat(task_time.split("+")[0])
+    start_date = str(datetime.strptime(str(task_time), "%Y-%m-%d %H:%M:%S") + timedelta(hours=9))
 
-    # Find new data
-    query = {"time": {"$gte": start_date}}
-    docs = list(collection.find(query))
+    # Check if the data exists in mariadb
+    cond_query = """
+    SELECT count(*) FROM wine_data;
+    """
+    with maria_client.cursor() as cursor:
+        cursor.execute(cond_query)
+        data = cursor.fetchone()[0]
 
+    # Get new data
+    select_query = {"time": {"$gte": start_date}} if data else {}
+    docs = list(mongo_client["mongo"]["wine_data"].find(select_query))
+
+    values = []
     for doc in docs:
-        features = eval(doc["input"])
-        query = f"""
-        INSERT INTO wine_data
-            (mongo_id, time, alcohol, malic_acid, ash, alcalinity_of_ash, magnesium,
-            total_phenols, flavanoids, nonflavanoid_phenols, proanthocyanins,
-            color_intensity, hue, od280_od315_of_diluted_wines, proline, target)
-            VALUES (
-                "{doc["_id"]}",
-                "{doc["time"]}",
-                {features["alcohol"]},
-                {features["malic_acid"]},
-                {features["ash"]},
-                {features["alcalinity_of_ash"]},
-                {features["magnesium"]},
-                {features["total_phenols"]},
-                {features["flavanoids"]},
-                {features["nonflavanoid_phenols"]},
-                {features["proanthocyanins"]},
-                {features["color_intensity"]},
-                {features["hue"]},
-                {features["od280/od315_of_diluted_wines"]},
-                {features["proline"]},
-                {doc["target"]}
-            );
-        """
+        features = eval(doc["features"])
+        values.append(
+            [
+                str(doc["_id"]),
+                str(doc["time"]),
+                features["alcohol"],
+                features["malic_acid"],
+                features["ash"],
+                features["alcalinity_of_ash"],
+                features["magnesium"],
+                features["total_phenols"],
+                features["flavanoids"],
+                features["nonflavanoid_phenols"],
+                features["proanthocyanins"],
+                features["color_intensity"],
+                features["hue"],
+                features["od280/od315_of_diluted_wines"],
+                features["proline"],
+                doc["labels"],
+            ],
+        )
 
-        with maria_client.cursor() as cursor:
-            cursor.execute(query)
-            maria_client.commit()
+    insert_query = """
+    INSERT INTO wine_data
+        (mongo_id, time, alcohol, malic_acid, ash, alcalinity_of_ash, magnesium,
+        total_phenols, flavanoids, nonflavanoid_phenols, proanthocyanins,
+        color_intensity, hue, od280_od315_of_diluted_wines, proline, target)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    """
+
+    with maria_client.cursor() as cursor:
+        cursor.executemany(insert_query, values)
+        maria_client.commit()
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--start-date", dest="start_date", type=str, default="2023-06-07 11:52:00")
+    parser.add_argument("--task-time", dest="task_time", type=str, default="")
     args = parser.parse_args()
 
     mongo_client, maria_client = create_db_client()
 
     create_table(maria_client=maria_client)
 
-    run(start_date=args.start_date, mongo_client=mongo_client, maria_client=maria_client)
+    run(task_time=args.task_time, mongo_client=mongo_client, maria_client=maria_client)

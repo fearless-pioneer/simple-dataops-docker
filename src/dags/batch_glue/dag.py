@@ -18,14 +18,14 @@ default_args = {
 }
 
 with DAG(
-    dag_id="simple_test",
+    dag_id="batch-glue",
     default_args=default_args,
-    schedule_interval="0 * * * *",
-    start_date=datetime.today(),
+    schedule_interval="*/1 * * * *",
+    start_date=datetime.today() + timedelta(hours=9) - timedelta(minutes=1),
     max_active_tasks=2,
 ) as dag:
     t1 = BashOperator(
         task_id="task_1",
-        bash_command="python {{ ds }}",
+        bash_command="python $AIRFLOW_HOME/dags/batch_glue/pipeline.py --task-time {{ ts }}",
         dag=dag,
     )

@@ -27,10 +27,10 @@ default_args = {
 }
 
 with DAG(
-    dag_id="simple_test",
+    dag_id="simple-test",
     default_args=default_args,
     schedule_interval="@once",
-    start_date=datetime.today(),
+    start_date=datetime.today() + timedelta(hours=9),
     max_active_tasks=2,
 ) as dag:
     t1 = PythonOperator(
@@ -40,19 +40,19 @@ with DAG(
         dag=dag,
     )
 
-    t2 = BashOperator(task_id="task_3", bash_command="sleep 10", dag=dag)
+    t2 = BashOperator(task_id="task_2", bash_command="sleep 10", dag=dag)
 
     t3 = PythonOperator(
-        task_id="task_2",
+        task_id="task_3",
         python_callable=print_fruit,
         op_kwargs={"fruit_name": "banana"},
         dag=dag,
     )
 
-    t4 = BashOperator(task_id="task_3", bash_command="sleep 5", dag=dag)
+    t4 = BashOperator(task_id="task_4", bash_command="sleep 5", dag=dag)
 
     t5 = PythonOperator(
-        task_id="task_4",
+        task_id="task_5",
         python_callable=print_fruit,
         op_kwargs={"fruit_name": "cherry"},
         dag=dag,
