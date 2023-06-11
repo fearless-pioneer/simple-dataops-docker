@@ -6,6 +6,7 @@ authors = [
     "dongminlee94 <kid33629@gmail.com>",
     "Kimdongui <rkdqus2006@naver.com>",
 ]
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
