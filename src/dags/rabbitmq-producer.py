@@ -72,10 +72,10 @@ default_args = {
 with DAG(
     dag_id="produce-time-to-rabbitmq",
     default_args=default_args,
-    schedule_interval=timedelta(minutes=1),
-    start_date=datetime.today(),
+    schedule_interval="*/1 * * * *",
+    start_date=datetime.today() + timedelta(hours=9) - timedelta(minutes=1),
     max_active_tasks=2,
-) as dag:
+):
     t1 = BashOperator(
         task_id="rabbitmq-health-check",
         bash_command='echo "check health state"',
@@ -91,7 +91,6 @@ with DAG(
             "user": "rabbit",
             "password": "rabbit",
         },
-        dag=dag,
     )
 
     t1 >> t2
