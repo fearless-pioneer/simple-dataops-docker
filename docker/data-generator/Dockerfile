@@ -1,7 +1,5 @@
 FROM python:3.10.11-slim
 
-COPY data-generator.py data-generator.py
-
 RUN pip install pymongo scikit-learn pandas
 
-CMD ["python", "data-generator.py"]
+COPY data_generator.py data_generator.py

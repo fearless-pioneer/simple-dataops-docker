@@ -38,6 +38,7 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    command: python data_generator.py
 
   mariadb:
     image: mariadb:10.6.13

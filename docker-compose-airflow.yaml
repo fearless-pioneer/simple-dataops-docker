@@ -35,9 +35,8 @@ services:
       - postgres
     env_file:
       - .env
-    entrypoint: /bin/bash
+    entrypoint: ["/bin/bash", "-c"]
     command:
-      - -c
       - |
         airflow db init &&
         airflow users create --firstname admin --lastname admin --email admin --password admin --username admin --role Admin
