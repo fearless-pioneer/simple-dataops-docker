@@ -4,30 +4,67 @@ Maintainer:
     Name: Donghyun Kim
     Email: rkdqus2006@naver.com
 """
-# import time
 from datetime import datetime, timedelta
 
-# import pika
 from airflow.models import DAG
+from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
 
-def establish_connect() -> None:
-    """TBD."""
+def produce_time_to_queue(
+    timezone: str,
+    host: str,
+    port: int,
+    user: str,
+    password: str,
+    queue_name: str = "rabbitmq-demo-queue",
+    exchange: str = "",
+) -> None:
+    """Publish KST time to rabbitmq.
 
+    Parameters
+    ----------
+    timezone : str
+        Available timezone string to be used by pytz.timezone. e.g. Asia/Seoul.
+    host : str
+        Rabbtmq host ip or URI.
+    port : int
+        Rabbtmq port.
+        if your rabbitmq server running by basic settings, it would be 5672.
+    user : str
+        Rabbtmq user name.
+    password : str
+        Rabbtmq password.
+    queue_name : str, optional
+        Rabbtmq queue name if not exists create new queue, by default "rabbitmq-demo-queue"
+    exchange : str, optional
+        Rabbtmq queue exchange type., by default "" it means Direct Exchange type.
+    """
+    import datetime
 
-def set_msg_queue() -> None:
-    """TBD."""
+    import pika
+    import pytz
 
+    credentials = pika.PlainCredentials(user, password)
+    parameters = pika.ConnectionParameters(host, port, "/", credentials)
 
-def produce_time_to_queue() -> None:
-    """TBD."""
+    conn = pika.BlockingConnection(parameters)
+    channel = conn.channel()
+    channel.queue_declare(queue=queue_name)
+
+    channel.basic_publish(
+        exchange=exchange,
+        routing_key=queue_name,
+        body=datetime.datetime.now(tz=pytz.timezone(timezone)).strftime("%y%m%d-%H:%M:%S"),
+    )
+
+    conn.close()
 
 
 default_args = {
     "owner": "donghyunkim",
     "depends_on_past": False,
-    "retries": 4,
+    "retries": 1,
     "retry_delay": timedelta(minutes=1),
     "execution_timeout": timedelta(minutes=5),
 }
@@ -35,28 +72,26 @@ default_args = {
 with DAG(
     dag_id="produce-time-to-rabbitmq",
     default_args=default_args,
-    schedule_interval="@once",
+    schedule_interval=timedelta(minutes=1),
     start_date=datetime.today(),
     max_active_tasks=2,
 ) as dag:
-    t1 = PythonOperator(
-        task_id="Establish-connection",
-        python_callable=establish_connect,
-        op_kwargs={"fruit_name": "apple"},
-        dag=dag,
+    t1 = BashOperator(
+        task_id="rabbitmq-health-check",
+        bash_command='echo "check health state"',
     )
 
     t2 = PythonOperator(
-        task_id="make-msg-queue",
-        python_callable=set_msg_queue,
-        dag=dag,
-    )
-
-    t3 = PythonOperator(
-        task_id="task_3",
+        task_id="produce-time-to-queue",
         python_callable=produce_time_to_queue,
-        op_kwargs={"timezone": "Asia/Seoul"},
+        op_kwargs={
+            "timezone": "Asia/Seoul",
+            "host": "rabbitmq",
+            "port": 5672,
+            "user": "rabbit",
+            "password": "rabbit",
+        },
         dag=dag,
     )
 
-    t1 >> t2 >> t3
+    t1 >> t2
