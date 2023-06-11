@@ -8,28 +8,6 @@ from pymongo import MongoClient
 from pymysql.connections import Connection
 
 
-def create_db_client() -> tuple[MongoClient, Connection]:
-    """Create DB client."""
-    mongo_client = MongoClient(
-        username="mongo",
-        password="mongo",
-        host="mongodb",
-        port=27017,
-        directConnection=True,
-        ssl=False,
-    )
-
-    maria_client = pymysql.connect(
-        user="maria",
-        password="maria",
-        host="mariadb",
-        port=3306,
-        database="maria",
-        charset="utf8",
-    )
-    return mongo_client, maria_client
-
-
 def create_table(maria_client: Connection) -> None:
     """Create table."""
     query = """
@@ -119,7 +97,23 @@ if __name__ == "__main__":
     parser.add_argument("--task-time", dest="task_time", type=str, default="")
     args = parser.parse_args()
 
-    mongo_client, maria_client = create_db_client()
+    mongo_client = MongoClient(
+        username="mongo",
+        password="mongo",
+        host="mongodb",
+        port=27017,
+        directConnection=True,
+        ssl=False,
+    )
+
+    maria_client = pymysql.connect(
+        user="maria",
+        password="maria",
+        host="mariadb",
+        port=3306,
+        database="maria",
+        charset="utf8",
+    )
 
     create_table(maria_client=maria_client)
 
