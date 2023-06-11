@@ -32,12 +32,13 @@ services:
 
   data-generator:
     build:
-      context: docker/data-generator
+      context: docker/data_generator
       dockerfile: Dockerfile
     container_name: data-generator
     depends_on:
       mongodb:
         condition: service_healthy
+    command: python data_generator.py
 
   mariadb:
     image: mariadb:10.6.13
