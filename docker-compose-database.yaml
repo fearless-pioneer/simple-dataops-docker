@@ -32,7 +32,7 @@ services:
 
   data-generator:
     build:
-      context: docker/data_generator
+      context: docker/data-generator
       dockerfile: Dockerfile
     container_name: data-generator
     depends_on:

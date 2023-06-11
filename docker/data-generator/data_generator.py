@@ -26,21 +26,22 @@ def main(mongo_client: MongoClient) -> None:
     collection = mongo_client["mongo"]["wine_data"]
 
     # Load wine dataset
-    X, y = load_wine(return_X_y=True, as_frame=True)  # noqa: N806
+    features, labels = load_wine(return_X_y=True, as_frame=True)
 
     # Generate data continuously
     cnt = 0
-    data_length = X.shape[0]
+    data_length = features.shape[0]
     while True:
         collection.insert_one(
             {
                 "index": cnt,
                 "time": datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
-                "features": json.dumps(X.iloc[cnt % data_length].to_dict()),
-                "labels": str(y.iloc[cnt % data_length]),
+                "features": json.dumps(features.iloc[cnt % data_length].to_dict()),
+                "labels": str(labels.iloc[cnt % data_length]),
             },
         )
         print(f"{cnt} row is pushed...")
+
         cnt += 1
         sleep(2)
 
@@ -54,4 +55,5 @@ if __name__ == "__main__":
         directConnection=True,
         ssl=False,
     )
+
     main(mongo_client=mongo_client)
