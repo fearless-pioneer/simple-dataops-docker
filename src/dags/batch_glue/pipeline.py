@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
+from json import loads
 
 import pymysql
 from pymongo import MongoClient
@@ -57,7 +58,7 @@ def run(task_time: str, mongo_client: MongoClient, maria_client: Connection) -> 
 
     values = []
     for doc in docs:
-        features = eval(doc["features"])
+        features = loads(doc["features"])
         values.append(
             [
                 str(doc["_id"]),

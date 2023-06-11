@@ -27,5 +27,4 @@ with DAG(
     t1 = BashOperator(
         task_id="task_1",
         bash_command="python $AIRFLOW_HOME/dags/batch_glue/pipeline.py --task-time {{ ts }}",
-        dag=dag,
     )
