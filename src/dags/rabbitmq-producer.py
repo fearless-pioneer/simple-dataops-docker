@@ -6,6 +6,8 @@ Maintainer:
 """
 from datetime import datetime, timedelta
 
+import pika
+import pytz
 from airflow.models import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
@@ -40,11 +42,6 @@ def produce_time_to_queue(
     exchange : str, optional
         Rabbtmq queue exchange type., by default "" it means Direct Exchange type.
     """
-    import datetime
-
-    import pika
-    import pytz
-
     credentials = pika.PlainCredentials(user, password)
     parameters = pika.ConnectionParameters(host, port, "/", credentials)
 
@@ -55,7 +52,7 @@ def produce_time_to_queue(
     channel.basic_publish(
         exchange=exchange,
         routing_key=queue_name,
-        body=datetime.datetime.now(tz=pytz.timezone(timezone)).strftime("%y%m%d-%H:%M:%S"),
+        body=datetime.now(tz=pytz.timezone(timezone)).strftime("%y%m%d-%H:%M:%S"),
     )
 
     conn.close()
