@@ -30,20 +30,20 @@ lint:
 ######################
 #   docker compose   #
 ######################
-all:
-	make database
+compose:
+	make db
 	make airflow
 	make broker
 
-all-clean:
+compose-clean:
 	make broker-clean
 	make airflow-clean
-	make database-clean
+	make db-clean
 
-database:
+db:
 	docker compose -p database -f docker-compose-database.yaml up -d
 
-database-clean:
+db-clean:
 	docker compose -p database down -v
 	docker rmi database-data-generator
 

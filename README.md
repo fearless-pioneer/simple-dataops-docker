@@ -6,7 +6,7 @@
 
 ## Preparation
 
-Install [Pyenv](https://github.com/pyenv/pyenv#installation) or [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) and execute the following commands:
+Install Python 3.10 on [Pyenv](https://github.com/pyenv/pyenv#installation) or [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) and execute the following commands:
 
 ```bash
 $ make init     # setup packages (need only once)
