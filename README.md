@@ -54,7 +54,7 @@ The schedule interval of the dag is `@once`, so when the dag is executed, it onl
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='img/simple_dag_unpause.png' width="400"> </center>
+<center> <img src='img/simple_dag_unpause.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
@@ -70,7 +70,7 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='img/batch_glue_unpause.png' width="400"> </center>
+<center> <img src='img/batch_glue_unpause.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
