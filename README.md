@@ -95,7 +95,7 @@ Reading table information for completion of table and column names
 You can turn off this feature to get a quicker startup with -A
 
 Database changed
-MariaDB [maria]> select * from wine_data limit 10;
+MariaDB [maria]> select * from wine_data limit 5;
 +----+---------------------+--------------------------+---------+------------+------+-------------------+-----------+---------------+------------+----------------------+-----------------+-----------------+------+------------------------------+---------+--------+
 | id | time                | mongo_id                 | alcohol | malic_acid | ash  | alcalinity_of_ash | magnesium | total_phenols | flavanoids | nonflavanoid_phenols | proanthocyanins | color_intensity | hue  | od280_od315_of_diluted_wines | proline | target |
 +----+---------------------+--------------------------+---------+------------+------+-------------------+-----------+---------------+------------+----------------------+-----------------+-----------------+------+------------------------------+---------+--------+
@@ -115,5 +115,5 @@ MariaDB [maria]> select * from wine_data limit 10;
 ```bash
 $ make check          # all static analysis scripts
 $ make format         # format scripts
-$ make lint           # lints scripts
+$ make lint           # lint scripts
 ```
