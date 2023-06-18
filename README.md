@@ -30,17 +30,17 @@ $ make compose-clean    # delete the containers
 
 You can access `localhost:8081` from a web browser and log in as `admin` for both ID and password and then view the data that is being added to the `mongo` database in the Mongo DB through the data generator.
 
-<center> <img src='img/mongodb_main_screen.png' width="800"> </center>
+<center> <img src='asset/mongodb_main_screen.png' width="800"> </center>
 
-<center> <img src='img/mongodb_mongo_database.png' width="800"> </center>
+<center> <img src='asset/mongodb_mongo_database.png' width="800"> </center>
 
 ### 2. Airflow
 
 You can access `localhost:8008` from a web browser and log in as `admin` for both ID and password.
 
-<center> <img src='img/airflow_log_in.png' width="800"> </center>
+<center> <img src='asset/airflow_log_in.png' width="800"> </center>
 
-<center> <img src='img/airflow_main_screen.png' width="800"> </center>
+<center> <img src='asset/airflow_main_screen.png' width="800"> </center>
 
 Run the dags according to the detailed case studies below.
 
@@ -54,11 +54,11 @@ The schedule interval of the dag is `@once`, so when the dag is executed, it onl
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='img/simple_dag_unpause.png' width="250"> </center>
+<center> <img src='asset/simple_dag_unpause.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='img/simple_dag_success.png' width="800"> </center>
+<center> <img src='asset/simple_dag_success.png' width="800"> </center>
 
 ### 2. Batch Glue
 
@@ -70,11 +70,11 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='img/batch_glue_unpause.png' width="250"> </center>
+<center> <img src='asset/batch_glue_unpause.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='img/batch_glue_success.png' width="800"> </center>
+<center> <img src='asset/batch_glue_success.png' width="800"> </center>
 
 Finally, you can access Maria DB and see that data is added every time the dag is executed.
 
