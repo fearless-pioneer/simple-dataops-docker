@@ -113,7 +113,7 @@ MariaDB [maria]> select * from wine_data limit 5;
 ## For Developers
 
 ```bash
-$ make check          # all static analysis scripts
+$ make check          # run all static analyses
 $ make format         # format scripts
 $ make lint           # lint scripts
 ```
