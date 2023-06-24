@@ -6,6 +6,7 @@ Maintainer:
 """
 from datetime import datetime
 
+import boto3
 import pika
 from pika import spec
 from pika.adapters.blocking_connection import BlockingChannel
@@ -15,6 +16,19 @@ credentials = pika.PlainCredentials("rabbit", "rabbit")
 parameters = pika.ConnectionParameters("rabbitmq", 5672, "/", credentials)
 
 
+MINIO_BUCKET = "bucket"
+MINIO_ENDPOINT = "http://minio:9000"
+MINIO_ACCESS_KEY_ID = "minio"
+MINIO_SECRET_ACCESS_KEY = "minio123"
+
+BOTO3_CLIENT = boto3.client(
+    "s3",
+    endpoint_url=MINIO_ENDPOINT,
+    aws_access_key_id=MINIO_ACCESS_KEY_ID,
+    aws_secret_access_key=MINIO_SECRET_ACCESS_KEY,
+)
+
+
 def insert_into_target_storage_callback(
     ch: BlockingChannel,  # noqa: ARG001
     method: spec.Basic.Deliver,  # noqa: ARG001
@@ -22,13 +36,24 @@ def insert_into_target_storage_callback(
     body: bytes,
 ) -> None:
     """Insert queue data to MinIO."""
-    print(f"[{datetime.now(tz=timezone('Asia/Seoul'))}]: {body}")
+    _now = datetime.now(tz=timezone("Asia/Seoul"))
+    print(f"[{_now}]: {body}")
 
-    # TODO: Parse data and push MinIO.
+    BOTO3_CLIENT.put_object(
+        Bucket=MINIO_BUCKET,
+        Key=f"{_now}.json",
+        Body=body,
+    )
 
 
-def consume_msg() -> None:
-    """Create or connect to rabbitmq queue and consume data."""
+def get_comsuming_channel() -> BlockingChannel:
+    """Create or connect to rabbitmq queue and return channel.
+
+    Returns
+    -------
+    BlockingChannel
+        Consumer channel.
+    """
     conn = pika.BlockingConnection(parameters)
 
     channel = conn.channel()
@@ -38,14 +63,14 @@ def consume_msg() -> None:
         auto_ack=True,
         on_message_callback=insert_into_target_storage_callback,
     )
-
-    print(" [*] Waiting for messages. To exit press CTRL+C")
-    channel.start_consuming()
+    return channel
 
 
 def main() -> None:
     """Consumer data from rabbitmq."""
-    consume_msg()
+    channel = get_comsuming_channel()
+    print(" [*] Waiting for messages. To exit press CTRL+C")
+    channel.start_consuming()
 
 
 if __name__ == "__main__":
