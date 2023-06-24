@@ -41,11 +41,11 @@ compose-clean:
 	make db-clean
 
 db:
-	docker compose -p database -f docker-compose-database.yaml up -d
+	docker compose -p db -f docker-compose-db.yaml up -d
 
 db-clean:
-	docker compose -p database down -v
-	docker rmi database-data-generator
+	docker compose -p db down -v
+	docker rmi db-data-generator
 
 airflow:
 	docker build -t airflow -f docker/airflow/Dockerfile .
