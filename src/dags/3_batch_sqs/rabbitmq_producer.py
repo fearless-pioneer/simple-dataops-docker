@@ -92,7 +92,7 @@ with DAG(
     max_active_tasks=2,
 ):
     t1 = BashOperator(
-        task_id="Guide procduce data to rabbitmq.",
+        task_id="guide-procduce-data-to-rabbitmq",
         bash_command='echo "Start producing data to rabbitmq..."',
     )
 
