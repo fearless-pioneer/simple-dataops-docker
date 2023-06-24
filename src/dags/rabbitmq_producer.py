@@ -1,4 +1,4 @@
-"""Send time to RabbitMQ.
+"""Send generated data to RabbitMQ.
 
 Maintainer:
     Name: Donghyun Kim
@@ -7,20 +7,20 @@ Maintainer:
 from datetime import datetime, timedelta
 
 import pika
-import pytz
 from airflow.models import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
+from pymongo import MongoClient
 
 
-def produce_time_to_queue(
-    timezone: str,
+def produce_data_to_queue(
     host: str,
     port: int,
     user: str,
     password: str,
     queue_name: str = "rabbitmq-demo-queue",
     exchange: str = "",
+    **context,
 ) -> None:
     """Publish KST time to rabbitmq.
 
@@ -42,18 +42,36 @@ def produce_time_to_queue(
     exchange : str, optional
         Rabbtmq queue exchange type., by default "" it means Direct Exchange type.
     """
+    # Connect to mongo client
+    mongo_client = MongoClient(
+        username="mongo",
+        password="mongo",
+        host="mongodb",
+        port=27017,
+        directConnection=True,
+        ssl=False,
+    )
+    task_time = datetime.fromisoformat(context["ts"].split("+")[0])
+    start_date = str(datetime.strptime(str(task_time), "%Y-%m-%d %H:%M:%S") + timedelta(hours=9))
+
+    # Connect to Queue.
     credentials = pika.PlainCredentials(user, password)
     parameters = pika.ConnectionParameters(host, port, "/", credentials)
 
     conn = pika.BlockingConnection(parameters)
     channel = conn.channel()
-    channel.queue_declare(queue=queue_name)
+    queue = channel.queue_declare(queue=queue_name)
 
-    channel.basic_publish(
-        exchange=exchange,
-        routing_key=queue_name,
-        body=datetime.now(tz=pytz.timezone(timezone)).strftime("%y%m%d-%H:%M:%S"),
-    )
+    select_query = {"time": {"$gte": start_date}} if queue.method.message_count > 0 else {}
+    docs = list(mongo_client["mongo"]["wine_data"].find(select_query))
+    for doc in docs:
+        features = doc["features"]
+
+        channel.basic_publish(
+            exchange=exchange,
+            routing_key=queue_name,
+            body=features,
+        )
 
     conn.close()
 
@@ -67,7 +85,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id="produce-time-to-rabbitmq",
+    dag_id="produce-data-to-rabbitmq",
     default_args=default_args,
     schedule_interval="*/1 * * * *",
     start_date=datetime.today() + timedelta(hours=9) - timedelta(minutes=1),
@@ -75,14 +93,14 @@ with DAG(
 ):
     t1 = BashOperator(
         task_id="rabbitmq-health-check",
-        bash_command='echo "check health state"',
+        bash_command='echo "TBD"',
     )
 
     t2 = PythonOperator(
-        task_id="produce-time-to-queue",
-        python_callable=produce_time_to_queue,
+        task_id="produce-data-to-queue",
+        python_callable=produce_data_to_queue,
+        provide_context=True,
         op_kwargs={
-            "timezone": "Asia/Seoul",
             "host": "rabbitmq",
             "port": 5672,
             "user": "rabbit",
