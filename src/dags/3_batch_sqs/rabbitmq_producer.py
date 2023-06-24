@@ -92,8 +92,8 @@ with DAG(
     max_active_tasks=2,
 ):
     t1 = BashOperator(
-        task_id="rabbitmq-health-check",
-        bash_command='echo "TBD"',
+        task_id="Guide procduce data to rabbitmq.",
+        bash_command='echo "Start producing data to rabbitmq..."',
     )
 
     t2 = PythonOperator(
