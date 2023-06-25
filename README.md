@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- Install [docker](https://docs.docker.com/engine/install/).
+- Install [Docker](https://docs.docker.com/engine/install/).
 
 ## Preparation
 
