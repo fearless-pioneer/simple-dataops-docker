@@ -88,7 +88,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id="produce-data-to-rabbitmq",
+    dag_id="batch-sqs",
     default_args=default_args,
     schedule_interval="*/1 * * * *",
     start_date=datetime.today() + timedelta(hours=9) - timedelta(minutes=1),
@@ -100,7 +100,7 @@ with DAG(
     )
 
     t2 = PythonOperator(
-        task_id="produce-data-to-queue",
+        task_id="produce-data-to-rabbitmq",
         python_callable=produce_data_to_queue,
         provide_context=True,
         op_kwargs={
