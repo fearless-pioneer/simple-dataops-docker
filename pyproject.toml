@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "simple-dataops-docker"
-version = "0.1.0"
+version = "0.0.0"
 description = "A simple DataOps for wine recognition dataset on Docker"
 authors = [
     "dongminlee94 <kid33629@gmail.com>",
