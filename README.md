@@ -48,7 +48,7 @@ Run the dags according to the detailed case studies below.
 
 ### 1. Simple Test
 
-You can run on a simple workflow called `simple-test` that you see on the main screen of airflow. You can also see the dag in `src/dags/1_simple_test/simple_dag.py`, defined as several tasks with the python and bash operators.
+You can run on a simple dag called `simple-test` that you see on the main screen of airflow. You can also see the dag in `src/dags/1_simple_test/simple_dag.py`, defined as several tasks with the python and bash operators.
 
 The schedule interval of the dag is `@once`, so when the dag is executed, it only works once at first. (references: [DAG Runs in Airflow](https://airflow.apache.org/docs/apache-airflow/1.10.1/scheduler.html#dag-runs) and [Cron in Wikipedia](https://en.wikipedia.org/wiki/Cron#CRON_expression))
 
@@ -62,7 +62,7 @@ After a few seconds, you can confirm that the dag has successfully ended on the 
 
 ### 2. Batch Glue
 
-You can run a `batch-glue` workflow that extracts, transforms, and loads (ETLs) data like [AWS Glue](https://aws.amazon.com/glue). You can also see the dag in `src/dags/2_batch_glue/dag.py` and the code for the task that runs on the bash operator in the dag in `src/dags/2_batch_glue/pipeline.py`.
+You can run a `batch-glue` dag that extracts, transforms, and loads (ETLs) data like [AWS Glue](https://aws.amazon.com/glue). You can also see the dag in `src/dags/2_batch_glue/dag.py` and the code for the task that runs on the bash operator in the dag in `src/dags/2_batch_glue/pipeline.py`.
 
 The task that works in the dag is to extract the wine data in Mongo DB, transform the type of data, and then load it into Maria DB.
 
@@ -70,11 +70,11 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_glue_unpause.png' width="250"> </center>
+<center> <img src='asset/batch_glue_dag_unpause.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_glue_success.png' width="800"> </center>
+<center> <img src='asset/batch_glue_dag_success.png' width="800"> </center>
 
 Finally, you can access Maria DB and see that data is added every time the dag is executed.
 
@@ -110,7 +110,7 @@ MariaDB [maria]> select * from wine_data limit 5;
 
 ### 3. Batch SQS
 
-You can run a `batch-sqs` workflow imitating [AWS SQS](https://aws.amazon.com/ko/sqs/). This process is an example of storing data using [Message Queue](https://en.wikipedia.org/wiki/Message_queue)(MQ).
+You can run a `batch-sqs` dag imitating [AWS SQS](https://aws.amazon.com/ko/sqs/). This process is an example of storing data using [Message Queue](https://en.wikipedia.org/wiki/Message_queue)(MQ).
 
 We used [RabbitMQ](https://www.rabbitmq.com/) as MQ and [MinIO](https://min.io/) as storage. the rest of settings are same of above.
 
@@ -118,7 +118,7 @@ The process consists of two steps:
 - First, you can check that data is generated in the Mongo DB every 2 seconds, and that a dag produces the data in the MQ every minute (same as the second case study above) according to the scheduled interval.
 - Second, you can check that the consumer consumes the data from MQ and stores it in storage.
 
-In detail, the `produce-data-to-rabbitmq` dag runs every minute because the schedule interval for the dag is specified as (*/1 * * * *) every minute and publishes the data to the RabbitMQ queue. So we can expect that the data will be synchronized every minute between the source DB(MongoDB) and the queue(RabbitMQ).
+In detail, the dag runs every minute because the schedule interval for the dag is specified as (*/1 * * * *) every minute and publishes the data to the RabbitMQ queue. So we can expect that the data will be synchronized every minute between the source DB(MongoDB) and the queue(RabbitMQ).
 
 Let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
