@@ -12,10 +12,6 @@ from pika import spec
 from pika.adapters.blocking_connection import BlockingChannel
 from pytz import timezone
 
-credentials = pika.PlainCredentials("rabbit", "rabbit")
-parameters = pika.ConnectionParameters("rabbitmq", 5672, "/", credentials)
-
-
 MINIO_BUCKET = "bucket"
 MINIO_ENDPOINT = "http://minio:9000"
 MINIO_ACCESS_KEY_ID = "minio"
@@ -54,10 +50,16 @@ def get_comsuming_channel() -> BlockingChannel:
     BlockingChannel
         Consumer channel.
     """
+    # Connect to queue
+    credentials = pika.PlainCredentials("rabbit", "rabbit")
+    parameters = pika.ConnectionParameters("rabbitmq", 5672, "/", credentials)
     conn = pika.BlockingConnection(parameters)
 
+    # Create a new channel and declare a queue on RabbitMQ server
     channel = conn.channel()
     channel.queue_declare("rabbitmq-simple-queue")
+
+    # Set up consumer for the queue and specify a callback function
     channel.basic_consume(
         queue="rabbitmq-simple-queue",
         auto_ack=True,

@@ -1,17 +1,17 @@
 # Simple DataOps Docker
 
-Landscape TBD
+<p align="center"><img src="asset/landscape.svg" width="700"></p>
 
 ## Prerequisites
 
-- Install [docker](https://docs.docker.com/engine/install/).
+- Install [Docker](https://docs.docker.com/engine/install/).
 
 ## Preparation
 
 Install Python 3.10 on [Pyenv](https://github.com/pyenv/pyenv#installation) or [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) and execute the following commands:
 
 ```bash
-$ make init     # setup packages (need only once)
+$ make init             # setup packages (need only once)
 ```
 
 ## Infra Setup
@@ -30,21 +30,21 @@ $ make compose-clean    # delete the containers
 
 You can access `localhost:8081` from a web browser and log in as `admin` for both ID and password and then view the data that is being added to the `mongo` database in the Mongo DB through the data generator.
 
-<center> <img src='asset/mongodb_main_screen.png' width="800"> </center>
+<p align="center"><img src="asset/mongodb_main_screen.png" width="800"></p>
 
-<center> <img src='asset/mongodb_mongo_database.png' width="800"> </center>
+<p align="center"><img src="asset/mongodb_mongo_database.png" width="800"></p>
 
 ### 2. Airflow
 
 You can access `localhost:8008` from a web browser and log in as `admin` for both ID and password.
 
-<center> <img src='asset/airflow_log_in.png' width="800"> </center>
+<p align="center"><img src="asset/airflow_log_in.png" width="800"></p>
 
-<center> <img src='asset/airflow_main_screen.png' width="800"> </center>
+<p align="center"><img src="asset/airflow_main_screen.png" width="800"></p>
 
 Run the dags according to the detailed case studies below.
 
-## Case Study
+## Case Studies
 
 ### 1. Simple Test
 
@@ -54,11 +54,11 @@ The schedule interval of the dag is `@once`, so when the dag is executed, it onl
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/simple_dag_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/simple_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/simple_dag_success.png' width="800"> </center>
+<p align="center"><img src="asset/simple_dag_success.png" width="800"></p>
 
 ### 2. Batch Glue
 
@@ -70,11 +70,11 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_glue_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/batch_glue_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_glue_success.png' width="800"> </center>
+<p align="center"><img src="asset/batch_glue_dag_success.png" width="800"></p>
 
 Finally, you can access Maria DB and see that data is added every time the dag is executed.
 
@@ -109,45 +109,47 @@ MariaDB [maria]> select * from wine_data limit 5;
 ```
 
 ### 3. Batch SQS
-You can run a `batch-sqs` dag imitating [AWS SQS](https://aws.amazon.com/ko/sqs/). This process is an example of storing data using [Message Queue](https://en.wikipedia.org/wiki/Message_queue). The process consists of two steps.
 
-First, get data in DB generated every 2 sec and the airflow dag will produce them to MQ every minute(same as above second case study) by schedulded. Second, consumer will extract data from MQ and save the data to storage to persist data.
+You can run a `batch-sqs` dag imitating [AWS SQS](https://aws.amazon.com/ko/sqs/). This process is an example of storing data using [Message Queue](https://en.wikipedia.org/wiki/Message_queue)(MQ).
 
-We tried to use popular open source system as much as possible. We used [RabbitMQ](https://www.rabbitmq.com/) as MQ and [MinIO](https://min.io/) as storage. the rest of settings are same of above.
+We used [RabbitMQ](https://www.rabbitmq.com/) as MQ and [MinIO](https://min.io/) as storage. the rest of settings are same of above.
 
-In detail, the `produce-data-to-rabbitmq` dag runs every minute because the schedule interval for the dag is specified as (*/1 * * * *), every minute and publish data to RabbitMQ system. So we can expect that data will be synchronized every minute between raw souce(MongoDB) and queue(RabbitMQ).
+The process consists of two steps:
+- First, you can check that data is generated in the Mongo DB every 2 seconds, and that a dag produces the data in the MQ every minute (same as the second case study above) according to the scheduled interval.
+- Second, you can check that the consumer consumes the data from MQ and stores it in storage.
+
+In detail, the dag runs every minute because the schedule interval for the dag is specified as (*/1 * * * *) every minute and publishes the data to the RabbitMQ queue. So we can expect that the data will be synchronized every minute between the source DB(MongoDB) and the queue(RabbitMQ).
 
 Let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/sqs_dag_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/batch_sqs_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/sqs_dag_success.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_dag_success.png" width="800"></p>
 
-First step is cleared and we can see result of them by seeing rabbitmq console([localhost:15672](localhost:15672)), ID and Password is set same word `rabbit`
+The first step is ended and we can see the result of them by accessing the RabbitMQ console([localhost:15672](localhost:15672)). the ID and Password are set same word `rabbit`.
 
-<center> <img src='asset/sqs_rabbitmq_console.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_rabbitmq_console.png" width="800"></p>
 
 Then you can also monitor how second step is going on using two methods.
 
-- `docker logs`
+#### 3.1  Docker Logs
+
 ```bash
 $ docker logs rabbitmq-consumer -f
 ```
-<center> <img src='asset/sqs_docker_logs.png' width="800"> </center>
 
-- `Minio console`([localhost:9900](localhost:9900)), ID: `minio`, Password: `minio123`
+<p align="center"><img src="asset/batch_sqs_docker_logs.png" width="800"></p>
 
-<center> <img src='asset/sqs_minio_console.png' width="800"> </center>
+#### 3.2 MinIO Console
+
+You can access `localhost:9900` from the web browser and log in as ID  `minio` and password `minio123`.
+
+<p align="center"><img src="asset/batch_sqs_minio_console.png" width="800"></p>
+
 <br>
 
-Finally you finished our systems, we hope you enjoy the journey and studied well. thank you for visiting our repository.
+Finally, you finished our case studies. We hope you enjoy the journey with case studies.
 
-## For Developers
-
-```bash
-$ make check          # run all static analyses
-$ make format         # format scripts
-$ make lint           # lint scripts
-```
+Thank you for visiting our repository!

@@ -11,7 +11,7 @@ from airflow.operators.bash import BashOperator
 
 default_args = {
     "owner": "dongminlee",
-    "depends_on_past": False,
+    "depends_on_past": True,
     "retries": 1,
     "retry_delay": timedelta(minutes=1),
     "execution_timeout": timedelta(minutes=5),
