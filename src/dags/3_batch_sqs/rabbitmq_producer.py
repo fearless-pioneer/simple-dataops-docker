@@ -58,6 +58,7 @@ def produce_data_to_queue(
     credentials = pika.PlainCredentials(user, password)
     parameters = pika.ConnectionParameters(host, port, "/", credentials)
 
+    # Make new queue in rabbitmq using connenction.
     conn = pika.BlockingConnection(parameters)
     channel = conn.channel()
     queue = channel.queue_declare(queue=queue_name)
