@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "dongminlee94",
+      "name": "Dongmin Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29733842?v=4",
+      "profile": "https://github.com/dongminlee94",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "simple-dataops-docker",
+  "projectOwner": "fearless-pioneer"
+}
