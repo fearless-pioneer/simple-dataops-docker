@@ -61,3 +61,4 @@ broker:
 
 broker-clean:
 	docker compose -p broker down -v
+	docker rmi broker-rabbitmq-consumer

@@ -16,6 +16,16 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbitmq-consumer:
+    build:
+      context: docker/rabbitmq-consumer
+      dockerfile: Dockerfile
+    container_name: rabbitmq-consumer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: python rabbit_consumer.py
+
 networks:
   default:
     name: simple-dataops-network
