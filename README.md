@@ -1,6 +1,6 @@
 # Simple DataOps Docker
 
-<p align="center"><img src="asset/landscape_1.svg" width="700"></p>
+<p align="center"><img src="asset/landscape.svg" width="700"></p>
 
 ## Prerequisites
 
