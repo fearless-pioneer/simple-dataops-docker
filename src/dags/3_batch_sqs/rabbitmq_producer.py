@@ -94,7 +94,7 @@ with DAG(
 ):
     t1 = BashOperator(
         task_id="guide-procduce-data-to-rabbitmq",
-        bash_command='echo "Start producing data to rabbitmq..."',
+        bash_command='echo "Start producing data to rabbitmq... task time is.. {{ ts }}(UTC)"',
     )
 
     t2 = PythonOperator(
