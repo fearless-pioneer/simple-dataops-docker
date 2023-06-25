@@ -22,23 +22,21 @@ def produce_data_to_queue(
     exchange: str = "",
     **context,
 ) -> None:
-    """Publish KST time to rabbitmq.
+    """Publish data to RabbitMQ queue.
 
     Parameters
     ----------
-    timezone : str
-        Available timezone string to be used by pytz.timezone. e.g. Asia/Seoul.
     host : str
         Rabbtmq host ip or URI.
     port : int
         Rabbtmq port.
-        if your rabbitmq server running by basic settings, it would be 5672.
+        if your RabbitMQ server running by basic settings, it would be 5672.
     user : str
         Rabbtmq user name.
     password : str
         Rabbtmq password.
     queue_name : str, optional
-        Rabbtmq queue name if not exists create new queue, by default "rabbitmq-demo-queue"
+        Rabbtmq queue name if not exists create new queue, by default "rabbitmq-simple-queue"
     exchange : str, optional
         Rabbtmq queue exchange type., by default "" it means Direct Exchange type.
     """
@@ -54,26 +52,30 @@ def produce_data_to_queue(
     task_time = datetime.fromisoformat(context["ts"].split("+")[0])
     start_date = str(datetime.strptime(str(task_time), "%Y-%m-%d %H:%M:%S") + timedelta(hours=9))
 
-    # Connect to Queue.
+    # Connect to queue
     credentials = pika.PlainCredentials(user, password)
     parameters = pika.ConnectionParameters(host, port, "/", credentials)
-
-    # Make new queue in rabbitmq using connenction.
     conn = pika.BlockingConnection(parameters)
+
+    # Create a new channel and declare a queue on RabbitMQ server
     channel = conn.channel()
     queue = channel.queue_declare(queue=queue_name)
 
+    # Select documents from Mongo DB
     select_query = {"time": {"$gte": start_date}} if queue.method.message_count > 0 else {}
     docs = list(mongo_client["mongo"]["wine_data"].find(select_query))
+
     for doc in docs:
         features = doc["features"]
 
+        # Publish the document to the queue
         channel.basic_publish(
             exchange=exchange,
             routing_key=queue_name,
             body=features,
         )
 
+    # Close the connection with RabbitMQ server
     conn.close()
 
 
