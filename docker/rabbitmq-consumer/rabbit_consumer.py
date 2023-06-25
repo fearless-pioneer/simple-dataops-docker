@@ -57,9 +57,9 @@ def get_comsuming_channel() -> BlockingChannel:
     conn = pika.BlockingConnection(parameters)
 
     channel = conn.channel()
-    channel.queue_declare("rabbitmq-demo-queue")
+    channel.queue_declare("rabbitmq-simple-queue")
     channel.basic_consume(
-        queue="rabbitmq-demo-queue",
+        queue="rabbitmq-simple-queue",
         auto_ack=True,
         on_message_callback=insert_into_target_storage_callback,
     )

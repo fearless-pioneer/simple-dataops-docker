@@ -18,7 +18,7 @@ def produce_data_to_queue(
     port: int,
     user: str,
     password: str,
-    queue_name: str = "rabbitmq-demo-queue",
+    queue_name: str = "rabbitmq-simple-queue",
     exchange: str = "",
     **context,
 ) -> None:
