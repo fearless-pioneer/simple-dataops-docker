@@ -28,3 +28,11 @@ jobs:
         push: false
         load: true
         tags: simple-dataops-docker-data-generator:latest
+    - name: Build rabbitmq consumer image
+      uses: docker/build-push-action@v4
+      with:
+        context: docker/rabbitmq-consumer
+        dockerfile: Dockerfile
+        push: false
+        load: true
+        tags: simple-dataops-docker-rabbitmq-consumer:latest
