@@ -25,6 +25,6 @@ with DAG(
     max_active_tasks=2,
 ) as dag:
     t1 = BashOperator(
-        task_id="task_1",
+        task_id="run-batch-glue",
         bash_command="python $AIRFLOW_HOME/dags/2_batch_glue/pipeline.py --task-time {{ ts }}",
     )
