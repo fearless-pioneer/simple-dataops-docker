@@ -38,9 +38,9 @@ You can access `localhost:8081` from a web browser and log in as `admin` for bot
 
 You can access `localhost:8008` from a web browser and log in as `admin` for both ID and password.
 
-<center> <img src='asset/airflow_log_in.png' width="800"> </center>
+<center> <img src='asset/airflow_log_in_1.png' width="800"> </center>
 
-<center> <img src='asset/airflow_main_screen.png' width="800"> </center>
+<center> <img src='asset/airflow_main_screen_1.png' width="800"> </center>
 
 Run the dags according to the detailed case studies below.
 
@@ -54,11 +54,11 @@ The schedule interval of the dag is `@once`, so when the dag is executed, it onl
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/simple_dag_unpause.png' width="250"> </center>
+<center> <img src='asset/simple_dag_unpause_1.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/simple_dag_success.png' width="800"> </center>
+<center> <img src='asset/simple_dag_success_1.png' width="800"> </center>
 
 ### 2. Batch Glue
 
@@ -70,11 +70,11 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_glue_dag_unpause.png' width="250"> </center>
+<center> <img src='asset/batch_glue_dag_unpause_1.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_glue_dag_success.png' width="800"> </center>
+<center> <img src='asset/batch_glue_dag_success_1.png' width="800"> </center>
 
 Finally, you can access Maria DB and see that data is added every time the dag is executed.
 
@@ -122,11 +122,11 @@ In detail, the dag runs every minute because the schedule interval for the dag i
 
 Let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_sqs_dag_unpause.png' width="250"> </center>
+<center> <img src='asset/batch_sqs_dag_unpause_1.png' width="250"> </center>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_sqs_dag_success.png' width="800"> </center>
+<center> <img src='asset/batch_sqs_dag_success_1.png' width="800"> </center>
 
 The first step is ended and we can see the result of them by accessing the RabbitMQ console([localhost:15672](localhost:15672)). the ID and Password are set same word `rabbit`.
 
