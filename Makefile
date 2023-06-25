@@ -33,10 +33,10 @@ lint:
 compose:
 	make db
 	make airflow
-	make broker
+	make queue
 
 compose-clean:
-	make broker-clean
+	make queue-clean
 	make airflow-clean
 	make db-clean
 
@@ -56,9 +56,9 @@ airflow-clean:
 	docker rmi airflow
 	rm -r ./logs
 
-broker:
-	docker compose -p broker -f docker-compose-broker.yaml up -d
+queue:
+	docker compose -p queue -f docker-compose-queue.yaml up -d
 
-broker-clean:
-	docker compose -p broker down -v
-	docker rmi broker-rabbitmq-consumer
+queue-clean:
+	docker compose -p queue down -v
+	docker rmi queue-rabbitmq-consumer
