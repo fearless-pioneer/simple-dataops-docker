@@ -1,6 +1,6 @@
 # Simple DataOps Docker
 
-Landscape TBD
+<center> <img src='asset/landscape.png' width="800"> </center>
 
 ## Prerequisites
 
