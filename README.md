@@ -1,6 +1,6 @@
 # Simple DataOps Docker
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center"><img src="asset/landscape.svg" width="700"></p>
@@ -168,6 +168,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dongminlee94"><img src="https://avatars.githubusercontent.com/u/29733842?v=4?s=100" width="100px;" alt="Dongmin Lee"/><br /><sub><b>Dongmin Lee</b></sub></a><br /><a href="https://github.com/fearless-pioneer/simple-dataops-docker/commits?author=dongminlee94" title="Documentation">📖</a> <a href="https://github.com/fearless-pioneer/simple-dataops-docker/commits?author=dongminlee94" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Kimdongui"><img src="https://avatars.githubusercontent.com/u/65523228?v=4?s=100" width="100px;" alt="Kim dong hyun, 김동현"/><br /><sub><b>Kim dong hyun, 김동현</b></sub></a><br /><a href="https://github.com/fearless-pioneer/simple-dataops-docker/commits?author=Kimdongui" title="Documentation">📖</a> <a href="https://github.com/fearless-pioneer/simple-dataops-docker/commits?author=Kimdongui" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
