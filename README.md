@@ -30,17 +30,17 @@ $ make compose-clean    # delete the containers
 
 You can access `localhost:8081` from a web browser and log in as `admin` for both ID and password and then view the data that is being added to the `mongo` database in the Mongo DB through the data generator.
 
-<center> <img src='asset/mongodb_main_screen.png' width="800"> </center>
+<p align="center"><img src="asset/mongodb_main_screen.png" width="800"></p>
 
-<center> <img src='asset/mongodb_mongo_database.png' width="800"> </center>
+<p align="center"><img src="asset/mongodb_mongo_database.png" width="800"></p>
 
 ### 2. Airflow
 
 You can access `localhost:8008` from a web browser and log in as `admin` for both ID and password.
 
-<center> <img src='asset/airflow_log_in.png' width="800"> </center>
+<p align="center"><img src="asset/airflow_log_in.png" width="800"></p>
 
-<center> <img src='asset/airflow_main_screen.png' width="800"> </center>
+<p align="center"><img src="asset/airflow_main_screen.png" width="800"></p>
 
 Run the dags according to the detailed case studies below.
 
@@ -54,11 +54,11 @@ The schedule interval of the dag is `@once`, so when the dag is executed, it onl
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/simple_dag_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/simple_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/simple_dag_success.png' width="800"> </center>
+<p align="center"><img src="asset/simple_dag_success.png" width="800"></p>
 
 ### 2. Batch Glue
 
@@ -70,11 +70,11 @@ The dag runs every minute because the schedule interval for the dag is specified
 
 So let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_glue_dag_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/batch_glue_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_glue_dag_success.png' width="800"> </center>
+<p align="center"><img src="asset/batch_glue_dag_success.png" width="800"></p>
 
 Finally, you can access Maria DB and see that data is added every time the dag is executed.
 
@@ -122,15 +122,15 @@ In detail, the dag runs every minute because the schedule interval for the dag i
 
 Let's run the dag. You can unpause the dag by clicking `Pause/Unpause DAG`.
 
-<center> <img src='asset/batch_sqs_dag_unpause.png' width="250"> </center>
+<p align="center"><img src="asset/batch_sqs_dag_unpause.png" width="250"></p>
 
 After a few seconds, you can confirm that the dag has successfully ended on the main screen of airflow.
 
-<center> <img src='asset/batch_sqs_dag_success.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_dag_success.png" width="800"></p>
 
 The first step is ended and we can see the result of them by accessing the RabbitMQ console([localhost:15672](localhost:15672)). the ID and Password are set same word `rabbit`.
 
-<center> <img src='asset/batch_sqs_rabbitmq_console.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_rabbitmq_console.png" width="800"></p>
 
 Then you can also monitor how second step is going on using two methods.
 
@@ -140,13 +140,14 @@ Then you can also monitor how second step is going on using two methods.
 $ docker logs rabbitmq-consumer -f
 ```
 
-<center> <img src='asset/batch_sqs_docker_logs.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_docker_logs.png" width="800"></p>
 
 #### 3.2 MinIO Console
 
 You can access `localhost:9900` from the web browser and log in as ID  `minio` and password `minio123`.
 
-<center> <img src='asset/batch_sqs_minio_console.png' width="800"> </center>
+<p align="center"><img src="asset/batch_sqs_minio_console.png" width="800"></p>
+
 <br>
 
 Finally, you finished our case studies. We hope you enjoy the journey with case studies.
