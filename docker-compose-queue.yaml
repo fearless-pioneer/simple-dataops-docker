@@ -24,7 +24,7 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    command: python rabbit_consumer.py
+    command: python rabbitmq_consumer.py
 
 networks:
   default:
