@@ -31,7 +31,6 @@ with DAG(
     default_args=default_args,
     schedule_interval="@once",
     start_date=datetime.today() + timedelta(hours=9),
-    max_active_tasks=2,
 ) as dag:
     t1 = PythonOperator(
         task_id="task_1",

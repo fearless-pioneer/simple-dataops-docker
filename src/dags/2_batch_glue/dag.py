@@ -22,7 +22,6 @@ with DAG(
     default_args=default_args,
     schedule_interval="*/1 * * * *",
     start_date=datetime.today() + timedelta(hours=9) - timedelta(minutes=1),
-    max_active_tasks=2,
 ) as dag:
     t1 = BashOperator(
         task_id="run-batch-glue",
