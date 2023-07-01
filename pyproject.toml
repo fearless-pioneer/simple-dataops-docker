@@ -36,7 +36,6 @@ line-length = 110
 profile = "black"
 skip_gitignore = true
 
-# Python Formatter
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = [
