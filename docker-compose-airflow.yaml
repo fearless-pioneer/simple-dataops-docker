@@ -31,8 +31,10 @@ services:
     image: airflow:latest
     container_name: initdb
     depends_on:
-      - redis
-      - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
       - .env
     entrypoint: ["/bin/bash", "-c"]
@@ -68,7 +70,7 @@ services:
     image: airflow:latest
     container_name: flower
     depends_on:
-      - redis
+      - initdb
     env_file:
       - .env
     ports:
