@@ -86,14 +86,14 @@ exclude = [
 ]
 per-file-ignores = {}
 
-# Assume target Python version.
+# Set up target Python version.
 target-version = "py310"
 
-# Same as Black.
+# Set up isort configuration.
 line-length = 110
 show-source = true
 
-# Same as Pylint.
+# Set up pylint configuration.
 pylint = {"max-args"=12, "max-statements"=60}
 
 [tool.mypy]
