@@ -86,14 +86,14 @@ exclude = [
 ]
 per-file-ignores = {}
 
-# Assume Python 3.10.
+# Assume target Python version.
 target-version = "py310"
 
 # Same as Black.
 line-length = 110
 show-source = true
 
-# Same as Pylint
+# Same as Pylint.
 pylint = {"max-args"=12, "max-statements"=60}
 
 [tool.mypy]
