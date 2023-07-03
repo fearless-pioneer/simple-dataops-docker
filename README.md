@@ -10,7 +10,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-<p align="center"><img src="asset/landscape.svg" width="700"></p>
+<p align="center"><img src="asset/landscape.png" width="700"></p>
 
 ## Prerequisites
 
