@@ -20,7 +20,7 @@ def print_fruit(fruit_name: str) -> None:
 
 default_args = {
     "owner": "dongminlee",
-    "depends_on_past": False,
+    "wait_for_downstream": True,
     "retries": 1,
     "retry_delay": timedelta(minutes=1),
     "execution_timeout": timedelta(minutes=5),

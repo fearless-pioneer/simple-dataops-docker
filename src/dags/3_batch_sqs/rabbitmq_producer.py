@@ -81,7 +81,7 @@ def produce_data_to_queue(
 
 default_args = {
     "owner": "donghyunkim",
-    "depends_on_past": True,
+    "wait_for_downstream": True,
     "retries": 1,
     "retry_delay": timedelta(minutes=1),
     "execution_timeout": timedelta(minutes=5),
