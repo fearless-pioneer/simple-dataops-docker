@@ -32,10 +32,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 110
 
-[tool.isort]
-profile = "black"
-skip_gitignore = true
-
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = [
